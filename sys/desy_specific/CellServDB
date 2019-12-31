@@ -1,0 +1,77 @@
+>cern.ch                #European Laboratory for Particle Physics, Geneva
+137.138.128.148                 #afsdb1.cern.ch
+137.138.246.50                  #afsdb3.cern.ch
+137.138.246.51                  #afsdb2.cern.ch
+>ipp-garching.mpg.de    #Institut fuer Plasmaphysik
+130.183.9.5                     #afs-db1.rzg.mpg.de
+130.183.14.14                   #afs-db3.bc.rzg.mpg.de
+130.183.100.10                  #afs-db2.aug.ipp-garching.mpg.de
+>slac.stanford.edu      #Stanford Linear Accelerator Center
+134.79.18.25                    #afsdb1.slac.stanford.edu
+134.79.18.26                    #afsdb2.slac.stanford.edu
+134.79.18.27                    #afsdb3.slac.stanford.edu
+>ifh.de                 #Deutsches Elektronen-Synchrotron Zeuthen
+141.34.22.10                    #romulus.ifh.de
+141.34.22.11                    #remus.ifh.de
+141.34.22.29                    #hekate.ifh.de
+>desy.de                #Deutsches Elektronen-Synchrotron
+131.169.2.39                    #afsdb1.desy.de
+131.169.2.19                    #afsdb2.desy.de
+131.169.2.20                    #afsdb3.desy.de
+>mpa-garching.mpg.de    # Max-Planck-Institut fuer Astrophysik
+130.183.83.30                   #afsdb-1.MPA-Garching.MPG.DE
+130.183.83.31                   #afsdb-2.MPA-Garching.MPG.DE
+130.183.83.32                   #afsdb-3.MPA-Garching.MPG.DE
+>rrz.uni-koeln.de       #University of Cologne - Reg Comp Center
+134.95.19.3                     #afsdb1.rrz.uni-koeln.de
+134.95.19.4                     #afsdb2.rrz.uni-koeln.de
+134.95.19.10                    #lyra.rrz.uni-koeln.de
+134.95.67.97                    #afs.thp.uni-koeln.de
+134.95.112.8                    #ladon.rrz.uni-koeln.de
+>infn.it                #Istituto Nazionale di Fisica Nucleare (INFN), Italia
+131.154.1.7                     #afscnaf.infn.it
+141.108.26.75                   #afsrm1.roma1.infn.it
+192.84.134.75                   #afsna.na.infn.it
+>le.infn.it             #INFN, Sezione di Lecce
+192.84.152.40                   #afs01.le.infn.it
+192.84.152.148                  #afs02.le.infn.it
+>lnf.infn.it            #INFN, Laboratori Nazionali di Frascati
+193.206.84.121                  #afs1.lnf.infn.it
+193.206.84.122                  #afs2.lnf.infn.it
+193.206.84.123                  #afs3.lnf.infn.it
+>lngs.infn.it           #INFN, Laboratori Nazionali di Gran Sasso
+192.84.135.21                   #afs1.lngs.infn.it
+192.84.135.133                  #afs2.lngs.infn.it
+>pi.infn.it             #INFN, Sezione di Pisa
+192.84.133.50                   #aix1.pi.infn.it
+212.189.152.6                   #afs1.pi.infn.it
+212.189.152.7                   #afs2.pi.infn.it
+>sipb.mit.edu           # MIT/SIPB cell
+18.181.0.19                     #reynelda.mit.edu.
+18.181.0.22                     #rosebud.mit.edu.
+18.181.0.23                     #ronald-ann.mit.edu
+>rhic.bnl.gov           #Relativistic Heavy Ion Collider
+130.199.6.51                    #rafs03.rcf.bnl.gov
+130.199.6.52                    #rafs02.rcf.bnl.gov
+130.199.6.69                    #rafs01.rcf.bnl.gov
+>in2p3.fr               #IN2P3 production cell
+134.158.104.11                  #ccafsdb01.in2p3.fr
+134.158.104.12                  #ccafsdb02.in2p3.fr
+134.158.104.13                  #ccafsdb03.in2p3.fr
+>nikhef.nl              #The Dutch National Institute for High Energy Physics
+192.16.185.26                   #afs1.nikhef.nl
+192.16.185.27                   #afs2.nikhef.nl
+>hep.wisc.edu           #University of Wisconsin -- High Energy Physics
+128.104.28.219                  #anise.hep.wisc.edu
+144.92.180.7                    #rosemary.hep.wisc.edu
+144.92.180.30                   #fennel.hep.wisc.edu
+>andrew.cmu.edu         #Carnegie Mellon University - Computing Services Cell
+128.2.10.2                      #afsdb-01.andrew.cmu.edu
+128.2.10.7                      #afsdb-02.andrew.cmu.edu
+128.2.10.11                     #afsdb-03.andrew.cmu.edu
+>cs.cmu.edu             #Carnegie Mellon University - School of Comp. Sci.
+128.2.172.58                    #date.srv.cs.cmu.edu
+128.2.172.60                    #fig.srv.cs.cmu.edu
+128.2.200.97                    #watermelon.srv.cs.cmu.edu
+>math.unifi.it          #math.unifi.it
+150.217.34.182                  #xeno.math.unifi.it

@@ -12,6 +12,8 @@
 #
 
 # declaring some necessary variables
+#                    https://desycloud.desy.de/index.php/s/Q4FdzZ5yiCj5gX8
+#                    https://desycloud.desy.de/index.php/s/Q4FdzZ5yiCj5gX8
 REPOSITORY_ROOT_BASE=https://desycloud.desy.de/index.php/s/Q4FdzZ5yiCj5gX8/download?path=%2Fsys
 REPOSITORY_ROOT=${REPOSITORY_ROOT_BASE}%2FCarbon
 REPOSITORY_CONFIGS_ROOT=${REPOSITORY_ROOT}%2Fconfigs\&files=
