@@ -16,8 +16,6 @@
 sourcePath=${0}
 cloutRepositoryBase=https://desycloud.desy.de/remote.php/webdav/oss_for_devs
 
-echo "Started sourcePath="$sourcePath"!!!!!!!!!!!!!!!!!!!!!"
-
 if [ "$#" -gt 0 ]; then
 	userName2=$1
 else
@@ -30,7 +28,7 @@ else
 	read -s -p "$userName2 Password:" password2
 	echo ""
 fi
-echo "Username:Password=["$userName2":"$password2"]"
+#echo "Username:Password=["$userName2":"$password2"]"
 
 currentDirectory=`pwd`
 sourceDirectoryPathBase=`dirname ${sourcePath}`
@@ -46,9 +44,8 @@ fi
 sourceDirectoryPath=`pwd`
 cd ${currentDirectory}
 
-echo "curDir="$currentDirectory " sourceDirPathBase="$sourceDirectoryPathBase " sourceDirPath="$sourceDirectoryPath " baseName="$baseName " fileOrigin="$fileOrigin
-
-exit 0
+#echo "curDir="$currentDirectory " sourceDirPathBase="$sourceDirectoryPathBase " sourceDirPath="$sourceDirectoryPath " baseName="$baseName " fileOrigin="$fileOrigin
+#exit 0
 
 # SL6 Carbon (be aware, SL6 also can have code name Santiago)
 curl -u $userName2:$password2 -T ${sourceDirectoryPath}/sys/Carbon/post_install_script.sh				${cloutRepositoryBase}/sys/Carbon/post_install_script.sh
