@@ -47,13 +47,23 @@ cd ${currentDirectory}
 #echo "curDir="$currentDirectory " sourceDirPathBase="$sourceDirectoryPathBase " sourceDirPath="$sourceDirectoryPath " baseName="$baseName " fileOrigin="$fileOrigin
 #exit 0
 
+function sendtocloud()
+{
+	local finalPath=${cloutRepositoryBase}/${2}
+	echo "Uploading sys/Carbon/"$1 " to " ${finalPath} 
+	curl --progress-bar -u $userName2:$password2 -T ${sourceDirectoryPath}/${1}	${finalPath} | tee /dev/null
+	#curl --progress-bar -u $userName2:$password2 -T ${sourceDirectoryPath}/${1}	${finalPath} 1>/dev/null
+	#echo "return="$?
+}
+
+
 # SL6 Carbon (be aware, SL6 also can have code name Santiago)
-curl -u $userName2:$password2 -T ${sourceDirectoryPath}/sys/Carbon/post_install_script.sh				${cloutRepositoryBase}/sys/Carbon/post_install_script.sh
-curl -u $userName2:$password2 -T ${sourceDirectoryPath}/sys/Carbon/local_create_mtca_znaccount_prvt		${cloutRepositoryBase}/sys/Carbon/scripts/local_create_mtca_znaccount_prvt
-curl -u $userName2:$password2 -T ${sourceDirectoryPath}/sys/desy_specific/CellAlias_Zn					${cloutRepositoryBase}/sys/Carbon/configs/CellAlias
-curl -u $userName2:$password2 -T ${sourceDirectoryPath}/sys/desy_specific/CellServDB					${cloutRepositoryBase}/sys/Carbon/configs/CellServDB
-curl -u $userName2:$password2 -T ${sourceDirectoryPath}/sys/desy_specific/ThisCell_Zn					${cloutRepositoryBase}/sys/Carbon/configs/ThisCell
+sendtocloud sys/Carbon/post_install_script.sh 			sys/Carbon/post_install_script.sh
+sendtocloud sys/Carbon/local_create_mtca_znaccount_prvt		sys/Carbon/scripts/local_create_mtca_znaccount_prvt
+sendtocloud sys/desy_specific/CellAlias_Zn 			sys/Carbon/configs/CellAlias
+sendtocloud sys/desy_specific/CellServDB			sys/Carbon/configs/CellServDB
+sendtocloud sys/desy_specific/ThisCell_Zn			sys/Carbon/configs/ThisCell
 
 # ubuntu18 (bionic)
-curl -u $userName2:$password2 -T ${sourceDirectoryPath}/sys/bionic/post_install_script.sh				${cloutRepositoryBase}/sys/bionic/post_install_script.sh
-curl -u $userName2:$password2 -T ${sourceDirectoryPath}/sys/bionic/local_create_mtca_znaccount_prvt		${cloutRepositoryBase}/sys/bionic/scripts/local_create_mtca_znaccount_prvt
+sendtocloud sys/bionic/post_install_script.sh 			sys/bionic/post_install_script.sh
+sendtocloud sys/bionic/local_create_mtca_znaccount_prvt 	sys/bionic/scripts/local_create_mtca_znaccount_prvt
