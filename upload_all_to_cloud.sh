@@ -50,7 +50,7 @@ cd ${currentDirectory}
 function sendtocloud()
 {
 	local finalPath=${cloutRepositoryBase}/${2}
-	echo "Uploading sys/Carbon/"$1 " to " ${finalPath} 
+	echo "Uploading " $1 " to " ${finalPath} 
 	curl --progress-bar -u $userName2:$password2 -T ${sourceDirectoryPath}/${1}	${finalPath} | tee /dev/null
 	#curl --progress-bar -u $userName2:$password2 -T ${sourceDirectoryPath}/${1}	${finalPath} 1>/dev/null
 	#echo "return="$?

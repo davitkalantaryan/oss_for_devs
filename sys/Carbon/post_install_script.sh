@@ -91,14 +91,15 @@ fi
 	wget ${REPOSITORY_SCRIPTS_ROOT}local_create_mtca_znaccount_prvt -O /export/doocs/.admin/local_create_mtca_znaccount_prvt 
 	
 # 9. Create necessary account 
-	# doocsadm for running servers
-	useradd -c "Doocs Admin" --home /export/home/doocsadm --gid 216 -m --shell /bin/bash --uid 995 doocsadm  
-	
 	# All developers
 	/export/doocs/.admin/local_create_mtca_znaccount_prvt bagrat
+	/export/doocs/.admin/local_create_mtca_znaccount_prvt gryvash
 	/export/doocs/.admin/local_create_mtca_znaccount_prvt kalantar
 	/export/doocs/.admin/local_create_mtca_znaccount_prvt mdavid
 	/export/doocs/.admin/local_create_mtca_znaccount_prvt sweisse
+	
+	# doocsadm for running servers
+	useradd -c "Doocs Admin" --home /export/home/doocsadm --gid 216 -m --shell /bin/bash --uid 995 doocsadm  
 	
 # 10. Setup corresponding owners and permissions for folders
 	chown -R doocsadm:pitz /export/doocs
