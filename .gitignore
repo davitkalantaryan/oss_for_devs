@@ -1,0 +1,4 @@
+
+
+/workspaces/*/*
+!/workspaces/*_qt/*.pro
