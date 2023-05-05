@@ -54,7 +54,7 @@ fi
 	rmmod openafs 2>/dev/null || : 
 	/etc/init.d/afs restart 
 	chkconfig afs on 
-	echo 'open the "cacheinfo" file in /usr/vice/etc and make sure it has a line like this: "/afs:/usr/vice/cache:100000"' 
+	echo 'open the "cacheinfo" file in /usr/vice/etc/cacheinfo and make sure it has a line like this: "/afs:/usr/vice/cache:100000"' 
 	
 # 4. Setup sshd to access login using kerberos https://docs.openafs.org/QuickStartUnix/HDRWQ41.html 
 	yum install pam_krb5 -y 
