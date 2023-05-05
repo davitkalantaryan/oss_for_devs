@@ -1,0 +1,98 @@
+#!/bin/sh
+#
+# file: local_create_mtca_account_prvt
+#
+# $Date 2015/04/23 10:51 $
+#
+# purpose:	to create local account on MTCA similar to network account
+#
+# author:	Davit Kalantaryan  (davit.kalantaryan@desy.de)
+#
+
+
+# check number of arguments
+
+#SCRIPTPATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+SCRIPT=$(readlink -f "$0")
+# Absolute path this script is in, thus /home/user/bin
+SCRIPTPATH=$(dirname "$SCRIPT")
+
+
+echo "++++++++++++++------------------"
+if [ "$#" -ne 1 ]; then
+  echo "Usage: $0 arguments should be one"
+  exit 1
+fi
+
+# check if user is root
+USER1=`id -nu`
+echo $USER1
+if [ "${USER1}" != "root" ] ; then
+	echo "!!! you must be root to start this script !!!"
+	exit 2
+fi
+
+# check if user account already exist or not
+USER_STRING=`cat /etc/passwd | grep "$1"`
+if [ -n "$USER_STRING" ]; then
+        echo "User " "$1" " already exist"
+	exit 0
+fi
+
+# check if user account exist in desy account list
+USER_STRING=`cat $SCRIPTPATH/.passwd_net_users | grep "$1"`
+#echo $USER_STRING
+#if [ ! -z "$USER_STRING" -a "$USER_STRING" != " " ]; then
+if [ -z "$USER_STRING" ]; then
+        echo "User info could not be found"
+	exit 3
+fi
+
+
+UID1=`echo $USER_STRING  | cut -d':' -f 3`
+echo uid:'		'$UID1
+
+GID1=`echo $USER_STRING  | cut -d':' -f 4`
+echo gid:'		'$GID1
+
+# check if user account exist in desy account list
+GID_EXIST=`getent group $GID1`
+if [ -z "$GID_EXIST" ]; then
+	GROUP_STRING=`cat $SCRIPTPATH/.groups_net_users | grep ":$GID1:"`
+	NEW_GROUP_NAME=`echo $GROUP_STRING  | cut -d':' -f 1`
+        echo 'Group "'$NEW_GROUP_NAME'" does not exist. The group will be created'
+	groupadd -g "$GID1" "$NEW_GROUP_NAME"
+	#exit 0
+fi
+
+USER_STRING_2=`echo $USER_STRING  | cut -d':' -f 5`
+#echo $USER_STRING_2
+
+FULL_NAME1=`echo $USER_STRING_2  | cut -d',' -f 1`
+echo Full name:'	'$FULL_NAME1
+
+ROOM_NUM1=`echo $USER_STRING_2  | cut -d',' -f 2`
+echo Room num:'	'$ROOM_NUM1
+
+WORK_PHONE1=`echo $USER_STRING_2  | cut -d',' -f 3`
+echo Work phone:'	'$WORK_PHONE1
+
+HOME_PHONE1=`echo $USER_STRING_2  | cut -d',' -f 4`
+echo Home phone:'	'$HOME_PHONE1
+
+HOME_DIR1=`echo $USER_STRING  | cut -d':' -f 6`
+echo Home dir:'	'$HOME_DIR1
+
+SHELLL1=`echo $USER_STRING  | cut -d':' -f 7`
+echo Shell:'		'$SHELLL1
+
+#return 0
+
+
+
+useradd -c "$FULL_NAME1,$WORK_PHONE1,$HOME_PHONE1" --home $HOME_DIR1 --gid $GID1 -M --shell /bin/bash --uid $UID1 $1
+
+# for SL
+usermod -aG wheel $1
+usermod -aG adm $1
+
