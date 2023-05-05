@@ -1,0 +1,150 @@
+
+
+  Setting up centos 7 after installation to have there qt 6.5.0
+  
+ 1.  Configure network interfaces
+     url: https://superuser.com/questions/1282808/how-to-enable-network-adapter-in-centos7-minimal
+	 steps
+      a) vi /etc/sysconfig/network-scripts/ifcfg-enp<number>  # (set ONBOOT=yes)
+	  b) service network restart  (or 'systemctl restart network')
+     after this we can work remotely (mac: 08002718F668, ip: 141.34.31.45, hostname: pitz-dtb71)
+  2.  yum makecache, yum update
+  3.  Install nano (better command line text editor)
+      yum install nano
+  4.  Install network tools. Mainly for ifconfig
+      url: https://linuxconfig.org/howto-install-ifconfig-on-centos-7-linux
+      yum install net-tools
+  5.  Configure DHCP   (does not work)
+       url: https://www.serverlab.ca/tutorials/linux/administration-linux/how-to-configure-centos-7-network-settings/
+	   steps
+        a) vi /etc/sysconfig/network-scripts/ifcfg-enp<number>  # ([DHCP=yes if there is a entry on our vamos])
+	    b) service network restart  (or 'systemctl restart network.service')
+       after this we can work remotely (mac: 08002718F668, ip: 141.34.31.45, hostname: pitz-dtb71)
+  6.  configure X11 Forwarding
+      url: https://prasadlinuxblog.wordpress.com/2018/05/29/how-configure-x11-forwarding-in-centos-rhel-6-7/
+	  steps: 
+         a) Install Required Packages
+            yum install -y xorg-x11-xauth xorg-x11-apps
+	     b) Enable X11 Fowarding
+            nano /etc/ssh/sshd_config  # set X11Forwarding yes
+		 c) Restart SSH Service
+		    systemctl restart sshd
+  7.  Mak sure that bash is installed
+      yum install bash -y
+  8.  Add some standard groups
+      groupadd -g 216 pitz
+      groupadd -g 406 doocsadm
+	  groupadd -g 10001 ers
+  9.  Add some users
+      useradd -c "ERS Generic,+4917636367726" --home /home/ers -m --gid 10001 --groups ers --shell /bin/bash --uid 11001 ers
+      useradd -c "Davit Kalantaryan,+4917636367726" --home /home/kalantar -m --gid 216 --groups pitz,doocsadm,ers --shell /bin/bash --uid 19863 kalantar -p 12345678
+  10. Ask users to set individual password   (maybe later on we will integrate with kerberos or something similar)
+  11. After developer has individual password make them sudoers
+      url: https://linuxize.com/post/how-to-add-user-to-sudoers-in-centos/
+	  steps:
+	   a) visudo  # make sure '%wheel  ALL=(ALL)       ALL'
+	   b) usermod -aG wheel kalantar
+  12. Install devtoolset 10
+      url: https://blog.abysm.org/2016/03/installing-developer-toolset-rhel-based-distributions/
+      steps:
+	   a) yum -y install centos-release-scl
+	   b) yum -y install epel-release
+	   c) yum -y install devtoolset-10
+  13. Enable devtoolset for all users
+      url: https://serverfault.com/questions/782433/how-to-run-a-shell-scripts-at-every-login-in-centos
+	  steps:
+	   a) add files 'devtoolset10_initer.sh' and 'devtoolset10_initer.csh' in the folder '/etc/profile.d/'
+          cd /etc/profile.d && echo "source /opt/rh/devtoolset-10/enable" > devtoolset10_initer.sh && echo "source /opt/rh/devtoolset-10/enable" > devtoolset10_initer.csh 
+	   b) add necessary library search paths. This can bve found by calling 'source /opt/rh/devtoolset-10/enable'
+          and examining 'LD_LIBRARY_PATH'. The file is added to '/etc/ld.so.conf.d'. The name of file is 'devtoolset10_initer.conf'
+          echo "/opt/rh/devtoolset-10/root/usr/lib64:/opt/rh/devtoolset-10/root/usr/lib:/opt/rh/devtoolset-10/root/usr/lib64/dyninst:/opt/rh/devtoolset-10/root/usr/lib/dyninst:/opt/rh/devtoolset-10/root/usr/lib64:/opt/rh/devtoolset-10/root/usr/lib" > devtoolset10_initer.conf
+  14. Check if g++ support C++ 17 (requirement for qt6)
+      url: https://stackoverflow.com/questions/34836775/compiler-standards-support-c11-c14-c17
+      gcc -v --help 2> /dev/null | sed -n '/^ *-std=\([^<][^ ]\+\).*/ {s//\1/p}'
+  15. Install some libraries necessary for Qt
+      yum -y install mesa-dri-drivers
+      yum -y install mesa-libGL-devel
+	  yum -y install libxcb-devel
+  17. Install git
+      yum -y install git
+  18. Compile and install zlib (maybe instead of below steps sudo yum install zlib-devel)
+      url: https://noknow.info/it/os/install_zlib_from_source?lang=en
+	  steps: 
+	   a) git clone https://github.com/davitkalantaryan/zlib.git
+	   b) cd zlib
+	   c) git submodule sync --recursive
+	   d) git submodule update --init --recursive
+	   e) ./configure
+	   f) make
+	   g) sudo make install prefix=/usr/local/zlib/1_2_13
+	   h) add 2 files ('zlib_init.sh' and 'zlib_init.csh') in the '/etc/profile.d' to init. 
+          The aim of this file is to init LIBRARY_PATH,C_INCLUDE_PATH and CPLUS_INCLUDE_PATH
+          The files will be added to the repository (todo: add files to the repository)
+	   i) cd /etc/ld.so.conf.d
+	   j) echo "/usr/local/zlib/1_2_13/lib" > zlib_init.conf
+  19. Compile and install openssl_1.1.1
+      url: https://gist.github.com/Bill-tran/5e2ab062a9028bf693c934146249e68c
+      git clone https://github.com/davitkalantaryan/openssl.git
+	  cd openssl
+	  git checkout OpenSSL_1_1_1-stable
+	  git submodule sync --recursive
+	  git submodule update --init --recursive
+	  ./config --prefix=/usr --openssldir=/etc/ssl --libdir=lib no-shared zlib-dynamic
+	  make
+	  sudo make install
+  20. Compile and install ninja
+      steps:
+	   a) git clone https://github.com/davitkalantaryan/ninja.git
+	   b) cd ninja
+	   c) git checkout v1.11.1
+	   d) git submodule sync --recursive
+	   e) git submodule update --init --recursive
+	   f) ./configure.py --bootstrap
+	   g) mkdir -p /home/ers/bin && mkdir -p /home/ers/lib
+	   h) cd /etc/profile.d && echo "export PATH=\${PATH}:/home/ers/bin" > ers_init.sh && echo "export PATH=\${PATH}:/home/ers/bin" > ers_init.csh
+	   i) cd to ninja repo
+	   j) cp ninja /home/ers/bin/.
+  21. Compile and install cmake
+      steps:
+	   a) git clone https://github.com/davitkalantaryan/CMake.git
+	   b) cd CMake
+	   c) git checkout v3.21.7
+	   d) git submodule sync --recursive
+	   e) git submodule update --init --recursive
+	   f) ./bootstrap && make && sudo make install
+  22. Compile and install python 3 (3.8.16)
+      url: https://computingforgeeks.com/how-to-install-python-3-on-centos/
+	  steps: 
+	   a) git clone https://github.com/davitkalantaryan/cpython.git
+	   b) cd cpython
+	   c) git checkout v3.8.16
+	   d) git submodule sync --recursive
+	   e) git submodule update --init --recursive
+	   f) sudo yum -y install bzip2-devel libffi-devel xz-devel
+	   g) ./configure --enable-optimizations
+	   h) make
+	   i) sudo make altinstall
+  23. Install all necessary packages for X11
+      url: https://doc.qt.io/qt-6/linux-requirements.html
+	  steps:
+	   1)  yum install libXrender-devel
+	   2)  yum install libxcb-devel
+	   3)  yum install libxkbcommon-devel
+	   4)  yum install libxkbcommon-x11-devel
+	   5)  yum install libXext-devel   # todo: version of this is older than required by qt, maybe we should compile from sources
+	   6)  yum install libX11-devel   # todo: version of this is older than required by qt, maybe we should compile from sources
+	   7)  yum install libSM-devel  # todo: version of this is older than required by qt, maybe we should compile from sources
+	   8)  yum install libICE-devel  # todo: version of this is older than required by qt, maybe we should compile from sources
+  24. Compile and install qt
+      url: https://doc.qt.io/qt-6/linux-building.html
+	  needed: CMake (3.21 or newer), Ninya (0.9.0 or newer), Python (version 3)
+	  steps: 
+	   a) git clone https://github.com/qt/qt5.git
+	   b) cd qt5
+	   c) git checkout v6.5.0
+	   d) git submodule sync --recursive
+	   e) git submodule update --init --recursive
+	   f) ./configure
+	   g) cmake --build . --parallel
+	   h) cmake --install . # todo: test this
+	  

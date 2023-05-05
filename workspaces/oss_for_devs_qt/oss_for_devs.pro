@@ -8,28 +8,18 @@ TEMPLATE = subdirs
 #CONFIG += ordered
 
 
-#SUBDIRS		+=	$${PWD}/../../contrib/sl6/EmCalc/SL6/EmCalc-SL6.pro
-#SUBDIRS		+=	$${PWD}/../../contrib/sl6/EmCont/SL6/EmCont-SL6.pro
-#SUBDIRS		+=	$${PWD}/../../contrib/sl6/FastScan/SL6/FastScan-SL6.pro
-#SUBDIRS		+=	$${PWD}/../../contrib/sl6/MemoryWatcher/SL6/MemoryWatcher-SL6.pro
-#SUBDIRS		+=	$${PWD}/../../contrib/sl6/Null_project/EmCont.pro
-#SUBDIRS		+=	$${PWD}/../../contrib/sl6/RootPlot/SL6/RootPlot-SL6.pro
+repositoryRoot = $${PWD}/../..
 
+
+OTHER_FILES += $$files($${repositoryRoot}/.github/*.yml,true)
+OTHER_FILES += $$files($${repositoryRoot}/sys/*.sh,true)
+OTHER_FILES += $$files($${repositoryRoot}/docs/*.txt,true)
 
 OTHER_FILES +=	\
-	$${PWD}/../../.gitattribues												\
-	$${PWD}/../../.gitignore												\
-	\
-	$${PWD}/../../sys/Carbon/add_devtoolset.sh								\
+	$${repositoryRoot}/.gitattribues										\
+	$${repositoryRoot}/.gitignore											\
 	$${PWD}/../../sys/Carbon/local_create_mtca_znaccount_prvt				\
-	$${PWD}/../../sys/Carbon/post_install_script.sh							\
-	\
-	$${PWD}/../../sys/Nitrogen/add_devtoolset.sh							\
-	$${PWD}/../../sys/Nitrogen/post_install_script.sh						\
-	\
 	$${PWD}/../../sys/bionic/local_create_mtca_znaccount_prvt				\
-	$${PWD}/../../sys/bionic/post_install_script.sh							\
-	\
 	$${PWD}/../../sys/desy_specific/CellAlias_Zn							\
 	$${PWD}/../../sys/desy_specific/CellServDB								\
-	$${PWD}/../../sys/desy_specific/ThisCell_Zn								\
+	$${PWD}/../../sys/desy_specific/ThisCell_Zn								
