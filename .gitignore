@@ -2,3 +2,4 @@
 
 /workspaces/*/*
 !/workspaces/*_qt/*.pro
+.tests
