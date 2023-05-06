@@ -124,6 +124,24 @@
 	   g) ./configure --enable-optimizations
 	   h) make
 	   i) sudo make altinstall
+  23. Compile and install XOrg
+      url: https://www.linuxfromscratch.org/blfs/view/svn/x/xorg7.html#xorg-env
+	  steps:
+	   1)  sudo yum -y install wget
+	   2)  Create sourcing file with the name 'xorg_sourcing' (see in the repository)
+  23. Compile and install libxcb-devel (with all dependencies)
+      url: https://www.linuxfromscratch.org/blfs/view/svn/x/xorg7.html#xorg-env
+      url: https://www.linuxfromscratch.org/blfs/view/svn/x/libxcb.html
+	  steps: 
+	   1)  git clone https://gitlab.freedesktop.org/xorg/lib/libxcb.git
+	   2)  git checkout libxcb-1.15
+	   3)  git submodule sync --recursive
+	   4)  git submodule update --init --recursive 
+	   5)  sudo yum -y install autoconf
+	   6)  sudo yum -y install automake
+	   7)  sudo yum provides "*/xorg-macros.pc"
+	   8)  sudo yum -y install wget
+	   9)  wget https://www.x.org/pub/individual/lib/libXau-1.0.11.tar.xz
   23. Install all necessary packages for X11
       url: https://doc.qt.io/qt-6/linux-requirements.html
 	  steps:
@@ -131,10 +149,15 @@
 	   2)  yum install libxcb-devel
 	   3)  yum install libxkbcommon-devel
 	   4)  yum install libxkbcommon-x11-devel
-	   5)  yum install libXext-devel   # todo: version of this is older than required by qt, maybe we should compile from sources
-	   6)  yum install libX11-devel   # todo: version of this is older than required by qt, maybe we should compile from sources
-	   7)  yum install libSM-devel  # todo: version of this is older than required by qt, maybe we should compile from sources
-	   8)  yum install libICE-devel  # todo: version of this is older than required by qt, maybe we should compile from sources
+	   5)  yum install mesa-libGL-devel
+	   6)  yum install xcb-util-wm-devel
+	   7)  yum install xcb-util-keysyms-devel
+	   8)  yum install xcb-util-image-devel
+	   9)  yum install xcb-util-renderutil-devel
+	   6)  yum install libXext-devel   # todo: version of this is older than required by qt, maybe we should compile from sources
+	   7)  yum install libX11-devel   # todo: version of this is older than required by qt, maybe we should compile from sources
+	   8)  yum install libSM-devel  # todo: version of this is older than required by qt, maybe we should compile from sources
+	   9)  yum install libICE-devel  # todo: version of this is older than required by qt, maybe we should compile from sources
   24. Compile and install qt
       url: https://doc.qt.io/qt-6/linux-building.html
 	  needed: CMake (3.21 or newer), Ninya (0.9.0 or newer), Python (version 3)
@@ -146,5 +169,14 @@
 	   e) git submodule update --init --recursive
 	   f) ./configure
 	   g) cmake --build . --parallel
-	   h) cmake --install . # todo: test this
+	   h) cmake --install . 
+	   i) cd /etc/profile.d && echo "export PATH=/usr/local/Qt-6.5.0/bin:\${PATH}" > qt_6_5_0_init.sh && echo "setenv PATH /usr/local/Qt-6.5.0/bin:\$PATH" > qt_6_5_0_init.csh
+  25. Compile and install llvm
+      url: https://github.com/qt-creator/qt-creator/tree/v10.0.1#getting-llvmclang-for-the-clang-code-model
+	  steps: 
+	   1)  git clone -b release_130-based --recursive https://code.qt.io/clang/llvm-project.git
+	   2)  mkdir build
+	   3)  cd build
+	   4)  
+	   5)  cmake --build . --target install
 	  
