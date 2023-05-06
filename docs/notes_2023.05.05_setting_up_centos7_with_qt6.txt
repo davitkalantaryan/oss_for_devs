@@ -20,6 +20,13 @@
         a) vi /etc/sysconfig/network-scripts/ifcfg-enp<number>  # ([DHCP=yes if there is a entry on our vamos])
 	    b) service network restart  (or 'systemctl restart network.service')
        after this we can work remotely (mac: 08002718F668, ip: 141.34.31.45, hostname: pitz-dtb71)
+  6.  Install some basics
+      url: https://www.thegeekdiary.com/lsb_release-command-not-found-fix-in-centos-rhel/
+	  steps: 
+	   1) yum update
+	   2) yum makecache
+	   3) yum whatprovides lsb_release
+	   4) yum install redhat-lsb-core
   6.  configure X11 Forwarding
       url: https://prasadlinuxblog.wordpress.com/2018/05/29/how-configure-x11-forwarding-in-centos-rhel-6-7/
 	  steps: 
@@ -128,7 +135,8 @@
       url: https://www.linuxfromscratch.org/blfs/view/svn/x/xorg7.html#xorg-env
 	  steps:
 	   1)  sudo yum -y install wget
-	   2)  Create sourcing file with the name 'xorg_sourcing' (see in the repository)
+	   2)  Create sourcing files with the names 'xorg.sh' and 'xorg.csh' (see in the repository dir. 'sys/Core/example_files').
+           Sourcing file will be in the directory '/etc/profile.d'
   23. Compile and install libxcb-devel (with all dependencies)
       url: https://www.linuxfromscratch.org/blfs/view/svn/x/xorg7.html#xorg-env
       url: https://www.linuxfromscratch.org/blfs/view/svn/x/libxcb.html
@@ -177,6 +185,7 @@
 	   1)  git clone -b release_130-based --recursive https://code.qt.io/clang/llvm-project.git
 	   2)  mkdir build
 	   3)  cd build
-	   4)  
-	   5)  cmake --build . --target install
+	   4)  cmake -D CMAKE_BUILD_TYPE=Release -D LLVM_ENABLE_RTTI=ON -D LLVM_ENABLE_PROJECTS="clang;clang-tools-extra" -D CMAKE_INSTALL_PREFIX=/usr/local/llvm ../llvm
+	   5)  cmake --build .
+	   6)  sudo cmake --install .
 	  
