@@ -23,19 +23,12 @@
   6.  Install some basics
       url: https://www.thegeekdiary.com/lsb_release-command-not-found-fix-in-centos-rhel/
 	  steps: 
-	   1) yum update
-	   2) yum makecache
-	   3) yum whatprovides lsb_release
-	   4) yum install redhat-lsb-core
-  6.  configure X11 Forwarding
-      url: https://prasadlinuxblog.wordpress.com/2018/05/29/how-configure-x11-forwarding-in-centos-rhel-6-7/
-	  steps: 
-         a) Install Required Packages
-            yum install -y xorg-x11-xauth xorg-x11-apps
-	     b) Enable X11 Fowarding
-            nano /etc/ssh/sshd_config  # set X11Forwarding yes
-		 c) Restart SSH Service
-		    systemctl restart sshd
+	   1)  sudo yum update
+	   2)  sudo yum makecache
+	   3)  sudo yum whatprovides lsb_release
+	   4)  sudo yum install redhat-lsb-core
+	   6)  sudo yum install mlocate
+	   7)  sudo updatedb
   7.  Mak sure that bash is installed
       yum install bash -y
   8.  Add some standard groups
@@ -44,7 +37,7 @@
 	  groupadd -g 10001 ers
   9.  Add some users
       useradd -c "ERS Generic,+4917636367726" --home /home/ers -m --gid 10001 --groups ers --shell /bin/bash --uid 11001 ers
-      useradd -c "Davit Kalantaryan,+4917636367726" --home /home/kalantar -m --gid 216 --groups pitz,doocsadm,ers --shell /bin/bash --uid 19863 kalantar -p 12345678
+      useradd -c "Davit Kalantaryan,+4917636367726" --home /home/kalantar -m --gid 216 --groups pitz,doocsadm,ers --shell /bin/bash --uid 19863 kalantar
   10. Ask users to set individual password   (maybe later on we will integrate with kerberos or something similar)
   11. After developer has individual password make them sudoers
       url: https://linuxize.com/post/how-to-add-user-to-sudoers-in-centos/
@@ -54,41 +47,24 @@
   12. Install devtoolset 10
       url: https://blog.abysm.org/2016/03/installing-developer-toolset-rhel-based-distributions/
       steps:
-	   a) yum -y install centos-release-scl
-	   b) yum -y install epel-release
-	   c) yum -y install devtoolset-10
+	   a) sudo yum -y install centos-release-scl
+	   b) sudo yum -y install epel-release
+	   c) sudo yum -y install devtoolset-10
   13. Enable devtoolset for all users
       url: https://serverfault.com/questions/782433/how-to-run-a-shell-scripts-at-every-login-in-centos
 	  steps:
-	   a) add files 'devtoolset10_initer.sh' and 'devtoolset10_initer.csh' in the folder '/etc/profile.d/'
-          cd /etc/profile.d && echo "source /opt/rh/devtoolset-10/enable" > devtoolset10_initer.sh && echo "source /opt/rh/devtoolset-10/enable" > devtoolset10_initer.csh 
+	   a) add files 'devtoolset10_init.sh' and 'devtoolset10_init.csh' in the folder '/etc/profile.d/'
+          cd /etc/profile.d && echo "source /opt/rh/devtoolset-10/enable" > devtoolset10_init.sh && echo "source /opt/rh/devtoolset-10/enable" > devtoolset10_init.csh 
 	   b) add necessary library search paths. This can bve found by calling 'source /opt/rh/devtoolset-10/enable'
-          and examining 'LD_LIBRARY_PATH'. The file is added to '/etc/ld.so.conf.d'. The name of file is 'devtoolset10_initer.conf'
-          echo "/opt/rh/devtoolset-10/root/usr/lib64:/opt/rh/devtoolset-10/root/usr/lib:/opt/rh/devtoolset-10/root/usr/lib64/dyninst:/opt/rh/devtoolset-10/root/usr/lib/dyninst:/opt/rh/devtoolset-10/root/usr/lib64:/opt/rh/devtoolset-10/root/usr/lib" > devtoolset10_initer.conf
+          and examining 'LD_LIBRARY_PATH'. The file is added to '/etc/ld.so.conf.d'. The name of file is 'devtoolset10_init.conf'
+          echo "/opt/rh/devtoolset-10/root/usr/lib64:/opt/rh/devtoolset-10/root/usr/lib:/opt/rh/devtoolset-10/root/usr/lib64/dyninst:/opt/rh/devtoolset-10/root/usr/lib/dyninst:/opt/rh/devtoolset-10/root/usr/lib64:/opt/rh/devtoolset-10/root/usr/lib" > devtoolset10_init.conf
   14. Check if g++ support C++ 17 (requirement for qt6)
       url: https://stackoverflow.com/questions/34836775/compiler-standards-support-c11-c14-c17
       gcc -v --help 2> /dev/null | sed -n '/^ *-std=\([^<][^ ]\+\).*/ {s//\1/p}'
-  15. Install some libraries necessary for Qt
-      yum -y install mesa-dri-drivers
-      yum -y install mesa-libGL-devel
-	  yum -y install libxcb-devel
   17. Install git
       yum -y install git
-  18. Compile and install zlib (maybe instead of below steps sudo yum install zlib-devel)
-      url: https://noknow.info/it/os/install_zlib_from_source?lang=en
-	  steps: 
-	   a) git clone https://github.com/davitkalantaryan/zlib.git
-	   b) cd zlib
-	   c) git submodule sync --recursive
-	   d) git submodule update --init --recursive
-	   e) ./configure
-	   f) make
-	   g) sudo make install prefix=/usr/local/zlib/1_2_13
-	   h) add 2 files ('zlib_init.sh' and 'zlib_init.csh') in the '/etc/profile.d' to init. 
-          The aim of this file is to init LIBRARY_PATH,C_INCLUDE_PATH and CPLUS_INCLUDE_PATH
-          The files will be added to the repository (todo: add files to the repository)
-	   i) cd /etc/ld.so.conf.d
-	   j) echo "/usr/local/zlib/1_2_13/lib" > zlib_init.conf
+  18. Compile and install zlib
+      sudo yum install zlib-devel
   19. Compile and install openssl_1.1.1
       url: https://gist.github.com/Bill-tran/5e2ab062a9028bf693c934146249e68c
       git clone https://github.com/davitkalantaryan/openssl.git
@@ -107,10 +83,9 @@
 	   d) git submodule sync --recursive
 	   e) git submodule update --init --recursive
 	   f) ./configure.py --bootstrap
-	   g) mkdir -p /home/ers/bin && mkdir -p /home/ers/lib
-	   h) cd /etc/profile.d && echo "export PATH=\${PATH}:/home/ers/bin" > ers_init.sh && echo "export PATH=\${PATH}:/home/ers/bin" > ers_init.csh
-	   i) cd to ninja repo
-	   j) cp ninja /home/ers/bin/.
+	   g) sudo mkdir -p /usr/local/ninja/bin
+	   h) sudo cp ninja /usr/local/ninja/bin/.
+	   i) cd /etc/profile.d && sudo echo "export PATH=\${PATH}:/usr/local/ninja/bin" > ninja_init.sh && sudo echo "setenv PATH \$PATH:/usr/local/ninja/bin" > ninja_init.csh
   21. Compile and install cmake
       steps:
 	   a) git clone https://github.com/davitkalantaryan/CMake.git
@@ -131,12 +106,49 @@
 	   g) ./configure --enable-optimizations
 	   h) make
 	   i) sudo make altinstall
-  23. Compile and install XOrg
+  23. Install meson
+	   python3.8 -m pip install meson
+  23. Compile and install XOrg (with all dependencies)
       url: https://www.linuxfromscratch.org/blfs/view/svn/x/xorg7.html#xorg-env
 	  steps:
 	   1)  sudo yum -y install wget
 	   2)  Create sourcing files with the names 'xorg.sh' and 'xorg.csh' (see in the repository dir. 'sys/Core/example_files').
            Sourcing file will be in the directory '/etc/profile.d'
+	   3)  wget https://www.x.org/pub/individual/util/util-macros-1.20.0.tar.xz
+	   4)  tar -xf util-macros-1.20.0.tar.xz
+	   5)  cd util-macros-1.20.0
+	   6)  ./configure $XORG_CONFIG
+	   7)  sudo make install  # as a root
+	   8)  wget https://xorg.freedesktop.org/archive/individual/proto/xorgproto-2022.2.tar.xz
+	   9)  tar -xf xorgproto-2022.2.tar.xz
+	   10) cd xorgproto-2022.2
+	   11) mkdir build
+	   12) cd build
+	   13) meson setup --prefix=$XORG_PREFIX -Dlegacy=true ..
+	   14) ninja
+	   15) sudo ninja install
+	   16) sudo mv -v $XORG_PREFIX/share/doc/xorgproto{,-2022.2}
+	   17) wget  https://xorg.freedesktop.org/archive/individual/proto/xcb-proto-1.15.2.tar.xz
+	   18) tar -xf xcb-proto-1.15.2.tar.xz
+	   19) cd xcb-proto-1.15.2
+	   20) PYTHON=python3 ./configure $XORG_CONFIG
+	   21) sudo make install
+	   22) sudo rm -f $XORG_PREFIX/lib/pkgconfig/xcb-proto.pc
+	   23) wget https://www.x.org/pub/individual/lib/libXdmcp-1.1.4.tar.xz
+	   24) tar -xf libXdmcp-1.1.4.tar.xz
+	   25) cd libXdmcp-1.1.4
+	   26) ./configure $XORG_CONFIG --docdir=/usr/share/doc/libXdmcp-1.1.4
+	   27) make
+	   28) sudo make install
+	   29) wget https://xorg.freedesktop.org/archive/individual/lib/libxcb-1.15.tar.xz
+	   30) tar -xf libxcb-1.15.tar.xz
+	   31) cd libxcb-1.15
+	   32) PYTHON=python3 ./configure $XORG_CONFIG --without-doxygen --docdir='${datadir}'/doc/libxcb-1.15
+	   33) make
+	   34) make check # to check the result. No error during check
+	   35) sudo make install
+	   36) https://gist.github.com/Venemo/a9483106565df3a83fc67a411191edbd
+	   37) git clone https://gitlab.freedesktop.org/mesa/mesa.git
   23. Compile and install libxcb-devel (with all dependencies)
       url: https://www.linuxfromscratch.org/blfs/view/svn/x/xorg7.html#xorg-env
       url: https://www.linuxfromscratch.org/blfs/view/svn/x/libxcb.html
@@ -150,6 +162,10 @@
 	   7)  sudo yum provides "*/xorg-macros.pc"
 	   8)  sudo yum -y install wget
 	   9)  wget https://www.x.org/pub/individual/lib/libXau-1.0.11.tar.xz
+	   10) https://www.linuxfromscratch.org/blfs/view/svn/x/x7lib.html
+	   11) as_root() {   if   [ $EUID = 0 ];        then $*;   elif [ -x /usr/bin/sudo ]; then sudo $*;   else                            su -c \\"$*\\";   fi; }
+	   12) export -f as_root
+	   13) ./compile_x7lib.sh  # compile script is in the repo
   23. Install all necessary packages for X11
       url: https://doc.qt.io/qt-6/linux-requirements.html
 	  steps:
@@ -166,6 +182,10 @@
 	   7)  yum install libX11-devel   # todo: version of this is older than required by qt, maybe we should compile from sources
 	   8)  yum install libSM-devel  # todo: version of this is older than required by qt, maybe we should compile from sources
 	   9)  yum install libICE-devel  # todo: version of this is older than required by qt, maybe we should compile from sources
+  15. Install some libraries necessary for Qt
+	       yum -y install mesa-dri-drivers
+	       yum -y install mesa-libGL-devel
+		   yum -y install libxcb-devel
   24. Compile and install qt
       url: https://doc.qt.io/qt-6/linux-building.html
 	  needed: CMake (3.21 or newer), Ninya (0.9.0 or newer), Python (version 3)
@@ -188,4 +208,13 @@
 	   4)  cmake -D CMAKE_BUILD_TYPE=Release -D LLVM_ENABLE_RTTI=ON -D LLVM_ENABLE_PROJECTS="clang;clang-tools-extra" -D CMAKE_INSTALL_PREFIX=/usr/local/llvm ../llvm
 	   5)  cmake --build .
 	   6)  sudo cmake --install .
+  6.  configure X11 Forwarding
+	  url: https://prasadlinuxblog.wordpress.com/2018/05/29/how-configure-x11-forwarding-in-centos-rhel-6-7/
+	  steps: 
+	     a) Install Required Packages
+	        yum install -y xorg-x11-xauth xorg-x11-apps
+	     b) Enable X11 Fowarding
+	           nano /etc/ssh/sshd_config  # set X11Forwarding yes
+         c) Restart SSH Service
+            systemctl restart sshd
 	  
